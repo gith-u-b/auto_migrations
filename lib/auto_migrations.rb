@@ -1,3 +1,6 @@
+# load rake
+Dir[File.join(File.dirname(__FILE__),'tasks/**/*.rake')].each { |f| load f } if defined?(Rake)
+
 module AutoMigrations
   
   def self.run
@@ -8,7 +11,7 @@ module AutoMigrations
       def define(info={}, &block) @version = Time.now.utc.strftime("%Y%m%d%H%M%S"); instance_eval(&block) end
     end
   
-    load(File.join(RAILS_ROOT, 'db', 'schema.rb'))
+    load(File.join(Rails.root, 'db', 'schema.rb'))
     ActiveRecord::Migration.drop_unused_tables
     ActiveRecord::Migration.drop_unused_indexes
     ActiveRecord::Migration.update_schema_version(ActiveRecord::Schema.version) if ActiveRecord::Schema.version
@@ -19,7 +22,7 @@ module AutoMigrations
   end
   
   def self.schema_to_migration(with_reset = false)
-    schema_in = File.read(File.join(RAILS_ROOT, "db", "schema.rb"))
+    schema_in = File.read(File.join(Rails.root, "db", "schema.rb"))
     schema_in.gsub!(/#(.)+\n/, '')
     schema_in.sub!(/ActiveRecord::Schema.define(.+)do[ ]?\n/, '')
     schema_in.gsub!(/^/, '  ')
@@ -33,7 +36,7 @@ module AutoMigrations
                 "    drop_table :#{table}\n"
               end.join
     schema << "  end\nend\n"
-    migration_file = File.join(RAILS_ROOT, "db", "migrate", "001_initial_schema.rb")
+    migration_file = File.join(Rails.root, "db", "migrate", "001_initial_schema.rb")
     File.open(migration_file, "w") { |f| f << schema }
     puts "Migration created at db/migrate/001_initial_schema.rb"
   end
@@ -122,10 +125,20 @@ module AutoMigrations
           # This catches stuff like :null, :precision, etc
           fields_in_schema[field].each_pair do |att,value|
             next if att == :type or att == :base or att == :name # special cases
-            if !value.nil? && value != fields_in_db[field].send(att)
-              new_attr[att] = value
-              changed = true
-            end
+            if !value.nil?
+              value_in_db = fields_in_db[field].send(att)
+              value_in_db = value_in_db.to_i if att == :default && new_type == :integer && value_in_db.class == String
+              if att == :default && new_type == :boolean && value_in_db.class == String
+                value_in_db_to_i = value_in_db.to_i
+                value_in_db = false if value_in_db_to_i == 0
+                value_in_db = true  if value_in_db_to_i == 1
+              end
+
+              if value != value_in_db
+                new_attr[att] = value
+                changed = true
+              end
+            end 
           end
 
           # Change the column if applicable
@@ -168,7 +181,7 @@ module AutoMigrations
       if ActiveRecord::Base.connection.tables.include?("schema_migrations")
         ActiveRecord::Base.connection.update("INSERT INTO schema_migrations VALUES ('#{version}')")
       end
-      schema_file = File.join(RAILS_ROOT, "db", "schema.rb")
+      schema_file = File.join(Rails.root, "db", "schema.rb")
       schema = File.read(schema_file)
       schema.sub!(/:version => \d+/, ":version => #{version}")
       File.open(schema_file, "w") { |f| f << schema }
@@ -177,3 +190,5 @@ module AutoMigrations
   end
 
 end
+
+ActiveRecord::Migration.send :include, AutoMigrations

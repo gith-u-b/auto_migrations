@@ -1,6 +1,22 @@
 require 'rake'
+require 'rubygems'
 require 'rake/testtask'
-require 'rake/rdoctask'
+require 'rdoc/task'
+
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gemspec|
+    gemspec.name = "auto_migrations"
+    gemspec.summary = "Auto database migration."
+    gemspec.description = "Auto database migration."
+    gemspec.email = "rubyer1993@gmail.com"
+    gemspec.homepage = "https://github.com/sai1024/auto_migrations"
+    gemspec.authors = ["sai (originally by PJ Hyett)"]
+  end
+  Jeweler::GemcutterTasks.new
+rescue LoadError
+  puts "Jeweler not available. Install it with: sudo gem install jeweler -s http://gemcutter.org"
+end
 
 desc 'Default: run unit tests.'
 task :default => :test
