@@ -6,7 +6,7 @@ require 'rdoc/task'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gemspec|
-    gemspec.name = "auto_migrations"
+    gemspec.name = "db_auto_migrations"
     gemspec.summary = "Auto database migration."
     gemspec.description = "Auto database migration."
     gemspec.email = "rubyer1993@gmail.com"

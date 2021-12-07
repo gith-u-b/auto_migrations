@@ -5,7 +5,7 @@
 # stub: auto_migrations 1.0.0 ruby lib
 
 Gem::Specification.new do |s|
-  s.name = "auto_migrations".freeze
+  s.name = "db_auto_migrations".freeze
   s.version = "1.0.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
@@ -25,12 +25,12 @@ Gem::Specification.new do |s|
     "README",
     "Rakefile",
     "VERSION",
-    "auto_migrations.gemspec",
+    "db_auto_migrations.gemspec",
     "bin/setup",
     "init.rb",
-    "lib/auto_migrations.rb",
-    "lib/tasks/auto_migrations_tasks.rake",
-    "test/auto_migrations_test.rb"
+    "lib/db_auto_migrations.rb",
+    "lib/tasks/db_auto_migrations_tasks.rake",
+    "test/db_auto_migrations_test.rb"
   ]
   s.homepage = "https://github.com/sai1024/auto_migrations".freeze
   s.rubygems_version = "3.0.9".freeze
