@@ -6,12 +6,12 @@
 
 Gem::Specification.new do |s|
   s.name = "db_auto_migrations".freeze
-  s.version = "2.0.0"
+  s.version = "2.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0".freeze) if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib".freeze]
   s.authors = ["sai (originally by PJ Hyett)".freeze]
-  s.date = "2021-12-08"
+  s.date = "2023-09-15"
   s.description = "Auto database migration.".freeze
   s.email = "rubyer1993@gmail.com".freeze
   s.executables = ["setup".freeze]
@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
     "lib/tasks/db_auto_migrations_tasks.rake",
     "test/db_auto_migrations_test.rb"
   ]
-  s.homepage = "https://github.com/sai1024/auto_migrations".freeze
+  s.homepage = "https://github.com/gith-u-b/auto_migrations".freeze
   s.rubygems_version = "3.0.9".freeze
   s.summary = "Auto database migration.".freeze
 end
